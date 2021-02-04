@@ -9,7 +9,7 @@ int main() {
   // cin을 cout으로부터 untie 시킴.(묶여있는 것을 풀어줘 cout 다음 cin인 경우 입력부터 받도록)
   // endl 대신 '\n'을 쓰는 이유도 속도 때문.
   cin.tie(0);
-  // priority_queue는 stl 제공.
+  // 우선순위 큐 priority_queue는 stl 제공.
   // priority_queue<int> minHeap이 default로 내림차순. 오름차순은 greater<int>
   priority_queue<int, vector<int>, greater<int>> minHeap;
   int N;
