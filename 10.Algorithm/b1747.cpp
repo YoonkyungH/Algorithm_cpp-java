@@ -9,7 +9,9 @@ using namespace std;
 
 bool prime_number(int n) {  // 소수 판별
   // 2부터 그 수의 제곱근까지의 수로 나뉘는지 확인하면 소수인지 아닌지 판별 가능
-  if (n < 2) return false;
+  if (n < 2)
+    return false;
+    
   int n_sqrt = (int)sqrt(n);
 
   for(int i=2; i<=n_sqrt; i++) {

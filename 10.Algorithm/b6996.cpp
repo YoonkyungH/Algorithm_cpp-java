@@ -9,7 +9,7 @@ int main() {
   string s, s2;
   bool flag = false;
 
-  // 알파벳의 각 개수, [0]은 사용 X
+  // 알파벳의 각 개수 0으로 설정, [0]은 사용 X
   int alphabet[27] = {0, };
   cin >> T;
 
@@ -28,7 +28,7 @@ int main() {
     }
     else {                          // 두 문자열의 길이가 같다면
       for(int i=0; i<s.length(); i++) {
-        // 문자를 하나씩 돌면서 (아스키코드 'a'가 97) 해당 알파벳 원소 증가
+        // 문자를 하나씩 돌면서 (아스키코드 'a'가 97) 해당 알파벳 배열 원소 증가
         alphabet[s.at(i)-96]++;
       }
 
