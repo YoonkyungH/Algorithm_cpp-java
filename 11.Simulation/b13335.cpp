@@ -4,6 +4,8 @@
 #include <algorithm>
 using namespace std;
 
+// 트럭
+
 int main() {
   ios::sync_with_stdio(0);
   int n, W, L;  // n: 트럭 수, W: 다리의 길이, L: 다리 최대 하중
