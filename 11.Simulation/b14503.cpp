@@ -5,7 +5,7 @@ using namespace std;
 // 로봇 청소기
 
 int N, M;   // 가로, 세로
-int r, c, d; // 칸의 좌표(r, c), 방향 d
+int r, c, d; // 로봇이 있는 칸의 좌표(r, c), 방향 d
 int map[MAX][MAX];
 int result;
 
