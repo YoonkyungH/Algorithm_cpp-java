@@ -52,6 +52,7 @@ int main() {
         cin >> n;
         dq2.push_back(n);
     }
+    // N만큼 false로 초기화
     dq.assign(N, false);
 
     while(1) {
