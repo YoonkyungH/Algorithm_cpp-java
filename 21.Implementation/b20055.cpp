@@ -9,7 +9,7 @@ deque<bool> dq; // 로봇
 deque<int> dq2; // 내구도
 int cnt=0, ans=1;
 
-void Rotation() {
+void rotation() {
     dq.push_front(dq.back());
     dq.pop_back();
     dq[N-1] = false;    // 비우는 자리
@@ -20,7 +20,7 @@ void Rotation() {
     
 }
 
-void Move() {
+void move() {
     for(int i=N-1; i>=0; i--) {
         // 해당 자리에 로봇이 있고 다음 자리에 로봇이 없고 내구도가 1 이상일 때
         if (dq[i] == true && dq[i + 1] == false && dq2[i + 1] > 0)
@@ -34,7 +34,7 @@ void Move() {
     }
 }
 
-void Put() {
+void put() {
     // 내구도가 1 이상이며 해당 자리가 비었을 때
     if(dq2[0]>0 && dq[0]==false) {
         dq[0] = true;
@@ -56,14 +56,16 @@ int main() {
     dq.assign(N, false);
 
     while(1) {
-        Rotation();
-        Move();
-        Put();
+        rotation();
+        move();
+        put();
 
+        // 내구도가 0인 자리를 체크
         cnt=0;
         for(int i=0; i<2*N; i++) {
             if(dq2[i] == 0) { cnt++; }
         }
+        // 내구도가 0인 자리가 K개 이상이라면 단계를 출력
         if(cnt >= K) { 
             cout << ans << '\n';
             return 0;
