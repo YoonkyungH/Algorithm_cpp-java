@@ -17,10 +17,6 @@ int main() {
 
         if (n == 0) { cout << "0\n"; }
         else if (n == 1) {
-            // string str;
-            // cin >> c;
-            // getline(cin, c);
-            // getline(cin, c);
             cout << "1\n";
         }
         else {
@@ -34,25 +30,19 @@ int main() {
                 v.push_back(pair<string, string>(tmp2, tmp1));
             }
 
+            // 종류별로 모으기 위해 오름차순 정렬
             sort(v.begin(), v.end());
 
+            // cout << "\nTEST1\n";
             // for(int i=0; i<v.size(); i++) {
-            //     cout << v[i].first << ' ' << v[i].second << '\n';
+            //     cout << i << ": " << v[i].first << ' ' << v[i].second << '\n';
             // }
 
             int ans = 1;
-            int cnt = 2;
+            int cnt = 2;    // 입거나 안 입거나
 
-            for (int j = 0; j < n; j++) {
-
-                // if(j == n-1) { 
-                //     if(v[j] == v[j-1]) { 
-                //         cnt++; break; 
-                //     } else {
-                //         break;
-                //     }
-                // }
-
+            // 벡터를 출력해보니 인덱스 1부터 시작
+            for (int j = 1; j < n; j++) {
                 if (v[j].first == v[j + 1].first) { cnt++; }
                 else {
                     ans *= cnt;
@@ -61,6 +51,7 @@ int main() {
             }
 
             ans *= cnt;
+            // 모두 벗는 경우를 제외해줌
             ans--;
 
             cout << ans << '\n';
