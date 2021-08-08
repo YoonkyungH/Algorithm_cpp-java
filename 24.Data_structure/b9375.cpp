@@ -1,63 +1,47 @@
 #include <iostream>
-#include <algorithm>
 #include <string>
 #include <vector>
 using namespace std;
 
+// 패션왕 신해빈
+
 int main() {
-    int T;
+    int T, N;
     cin >> T;
 
     while(T--) {
-        int n;
-        cin >> n;   // 의상 종류
+        vector<pair<string, int> > v;
 
-        string s;
-        vector<pair<string, string> > v;
+        cin >> N;
 
-        if (n == 0) { cout << "0\n"; }
-        else if (n == 1) {
-            cout << "1\n";
-        }
-        else {
+        string s1, s2;
+        for(int n=0; n<N; n++) {
+            cin >> s1 >> s2;
 
-            for (int j = 0; j <= n; j++) {
-                // cin은 공백 문자에서 입력을 끊어버림
-                getline(cin, s);
-                int point = s.find(' ');
-                string tmp1 = s.substr(0, point);
-                string tmp2 = s.substr(point + 1, (s.size()-1) - point);
-                v.push_back(pair<string, string>(tmp2, tmp1));
-            }
+            // 옷이 하나도 없다면 일단 추가
+            if(v.size() == 0) { v.push_back(pair<string, int>(s2, 1)); continue; }
 
-            // 종류별로 모으기 위해 오름차순 정렬
-            sort(v.begin(), v.end());
-
-            // cout << "\nTEST1\n";
-            // for(int i=0; i<v.size(); i++) {
-            //     cout << i << ": " << v[i].first << ' ' << v[i].second << '\n';
-            // }
-
-            int ans = 1;
-            int cnt = 2;    // 입거나 안 입거나
-
-            // 벡터를 출력해보니 인덱스 1부터 시작
-            for (int j = 1; j < n; j++) {
-                if (v[j].first == v[j + 1].first) { cnt++; }
-                else {
-                    ans *= cnt;
-                    cnt = 2;
+            for(int i=0; i<v.size(); i++) {
+                // 벡터를 돌면서 같은 종류의 옷이라면 second에 옷 개수를 추가
+                if(s2 == v[i].first) {
+                    v[i].second++;
+                    break;
                 }
+                // 끝까지 돌았는데 없다면 새로운 종류의 옷이므로 추가
+                if(i == v.size()-1) { v.push_back(pair<string, int>(s2, 0)); }
             }
 
-            ans *= cnt;
-            // 모두 벗는 경우를 제외해줌
-            ans--;
-
-            cout << ans << '\n';
-            
-            v.clear();
         }
+
+        int ans = 1;
+        for(int j=0; j<v.size(); j++) {
+            // +1은 그 종류의 옷을 걸치지 않는 경우
+            ans *= (v[j].second+1);
+        }
+
+        // -1은 모두 벗는 경우
+        cout << ans-1 << '\n';
     }
+
     return 0;
 }
