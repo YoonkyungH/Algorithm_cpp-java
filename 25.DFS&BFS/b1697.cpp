@@ -2,7 +2,7 @@
 #include <queue>
 using namespace std;
 
-#define MAX 100000
+#define MAX 100001
 
 // 숨바꼭질
 
@@ -26,7 +26,8 @@ int bfs(int n) {
             q.push(make_pair(x+1, cnt+1));
             visited[x+1] = true;
         }
-        if(x-1<MAX && visited[x-1]==false) {
+        // 주의) 빼기니까 0보다 클 때를 검사할 것
+        if(x-1>=0&& visited[x-1]==false) {
             q.push(make_pair(x-1, cnt+1));
             visited[x-1] = true;
         }
