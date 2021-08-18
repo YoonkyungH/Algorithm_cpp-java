@@ -1,110 +1,84 @@
-#include <iostream>
+#include <cstdio>
 #include <queue>
-#include <tuple> // 3쌍의 값을 묶기 위해
+#include <tuple>
+
 using namespace std;
 
-#define MAX 100
+int d[100][100][100];
+bool chk[100][100][100];
 
-// 토마토
-
-int M, N, H;
-int map[MAX][MAX][MAX] = {-1, };
-queue<tuple<int, int, int> > q;
-bool visited[MAX][MAX][MAX] = {false, };
-int day = 1;
-
-// 동 서 남 북 위 아래
-int dx[6] = {1, -1, 0, 0, 0, 0};
-int dy[6] = {0, 0, 1, -1, 0, 0};
-int dh[6] = {0, 0, 0, 0, 1, -1};
-
-// void bfs(int x, int y, int h) {
-void bfs() {
-
-    // day++;
-    // q.push(make_tuple(x, y, h));
-
-    // visited[x][y][h] = true;
-    int x, y, h;
-
-    while(!q.empty()) {
-        x = get<0>(q.front());
-        y = get<1>(q.front());
-        h = get<2>(q.front());
-
+int main()
+{
+    int m, n, h;
+    scanf("%d %d %d", &m, &n, &h);
+    int dx[] = {1, -1, 0, 0, 0, 0};
+    int dy[] = {0, 0, 1, -1, 0, 0};
+    int dz[] = {0, 0, 0, 0, 1, -1};
+    queue<tuple<int, int, int>> q;
+    bool is_right;
+    for (int z = 0; z < h; z++)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                scanf("%d", &d[i][j][z]);
+                // 0이 입력됐는지 확인
+                if (d[i][j][z] == 0)
+                    is_right = true;
+                if (d[i][j][z] == 1)
+                {
+                    q.push(make_tuple(i, j, z));
+                    chk[i][j][z] = true;
+                }
+            }
+        }
+    }
+    // 0의 입력이 없으면
+    if (!is_right)
+    {
+        printf("0");
+        return 0;
+    }
+    while (!q.empty())
+    {
+        int x, y, z;
+        tie(x, y, z) = q.front();
         q.pop();
-    
-        visited[h][y][x] = true;
-
-        for(int i=0; i<6; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            int nh = h + dh[i];
-
-            if(0<=nx && nx<N && 0<=ny && ny<M && 0<=nh && nh<h) {
-                if(visited[nh][ny][nx]==false && map[nh][nx][nx]==0) {
-                    q.push(make_tuple(nh, ny, nx));
-                    visited[nh][ny][nx] = true;
-                    map[nh][ny][nx] = 1;
-                    // map[nh][ny][nx] = map[h][y][x] + 1;
-                    // day = map[nh][ny][nx];
+        for (int k = 0; k < 6; k++)
+        {
+            int nx = x + dx[k];
+            int ny = y + dy[k];
+            int nz = z + dz[k];
+            if (nx >= 0 && nx < n && ny >= 0 && ny < m && nz >= 0 && nz < h)
+            {
+                if (d[nx][ny][nz] == 0 && !chk[nx][ny][nz])
+                {
+                    q.push(make_tuple(nx, ny, nz));
+                    chk[nx][ny][nz] = true;
+                    d[nx][ny][nz] = d[x][y][z] + 1;
                 }
             }
         }
-        day++;
     }
-}
-
-int main() {
-    ios::sync_with_stdio(0);
-
-    cin >> M >> N >> H;
-
-    bool flag = false;
-    int cnt = 0;
-
-
-    for(int i=0; i<H; i++) {
-        for(int j=0; j<N; j++) {
-            for(int k=0; k<M; k++) {
-                cin >> map[i][j][k];
-                if(map[i][j][k] == 1) { 
-                    // 익은 토마토가 하나라도 있음
-                    flag = true; 
-                    // bfs(j, k, i);
-                    // 모두 익어있는 경우를 판별하기 위함
-                    cnt++; 
-                    q.push(make_tuple(i, j, k));
-                    // visited[j][k][i] = true;
+    int ans = 0;
+    for (int z = 0; z < h; z++)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (d[i][j][z] == 0)
+                { // 익지 않은 토마토가 있을 경우
+                    printf("-1");
+                    return 0;
                 }
-                else if(map[i][j][k] == -1) { cnt++; }
+                if (ans < d[i][j][z])
+                    ans = d[i][j][z];
             }
         }
     }
-    bfs();
-
-
-    // 테스트
-    // for(int i=0; i<H; i++) {
-    //     for(int j=0; j<N; j++) {
-    //         for(int k=0; k<M; k++) {
-    //             cout << map[k][j][i] << ' ';
-    //         } cout << '\n';
-    //     } cout << '\n';
-    // }
-
-    // for(int i=0; i<H; i++) {
-    //     for(int j=0; j<N; j++) {
-    //         for(int k=0; k<M; k++) {
-    //             if(map[j][k][i] > day) { day = map[j][k][i]; }
-    //         }
-    //     }
-    // }
-
-    if(flag == false) { cout << "-1\n"; }       // 모두 익지 못함
-    else if(H*N*M == cnt) { cout << "0\n"; }    // 모두 익어있음
-    else { cout << day << '\n'; }
-
+    printf("%d", ans - 1);
     return 0;
 }
 
