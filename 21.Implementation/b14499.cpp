@@ -13,8 +13,7 @@ int map[MAX][MAX] = {0, };  // 지도
 
 int N, M;               // 세로, 가로
 int x, y;               // 주사위 좌표
-// int ans = 1;            // 가장 처음 윗면 = 1
-// int cur = 6;            // 현재 바닥면
+
 bool flag = true;       // 명령이 가능한 명령인지 (가능: true, 불가능: flase)
 
 // 파라미터는 현재 주사위의 위치 (즉, 명령 수행 전)
@@ -24,23 +23,13 @@ void east(int yy, int xx) {   // 동
 
     vector<int> cv(7);
     // copy(dice.begin(), dice.end(), cv.begin());
-    for(int i=0; i<=7; i++) {
+    for(int i=0; i<8; i++) {
         cv[i] = dice[i];
     }
-
-    // cout << "CV\n";
-    // for(int i=1; i<7; i++) {
-    //     cout << cv[i] << ' ';
-    // } cout << '\n';
 
     dice[1] = cv[4]; dice[2] = cv[2]; dice[3] = cv[1];
     dice[5] = cv[6]; dice[6] = cv[5]; dice[6] = cv[3];
     // dice = {0, dice[4], dice[2], dice[1], dice[6], dice[5], dice[3]};
-
-    // cout << "EAST\n";
-    // for(int i=1; i<7; i++) {
-    //     cout << dice[i] << ' ';
-    // } cout << '\n';
 
 }
 
@@ -50,24 +39,14 @@ void west(int yy, int xx) {   // 서
 
     vector<int> cv(7);
     // copy(dice.begin(), dice.end(), cv.begin());
-    for(int i=0; i<=7; i++) {
+    for(int i=0; i<8; i++) {
         cv[i] = dice[i];
     }
-
-    // cout << "CV\n";
-    // for(int i=1; i<7; i++) {
-    //     cout << cv[i] << ' ';
-    // } cout << '\n';
 
     dice[1] = cv[3]; dice[2] = cv[2]; dice[3] = cv[6];
     dice[4] = cv[1]; dice[5] = cv[5]; dice[6] = cv[4];
 
     // dice = {0, dice[3], dice[2], dice[6], dice[1], dice[5], dice[4]};
-
-    // cout << "WEST\n";
-    // for(int i=1; i<7; i++) {
-    //     cout << dice[i] << ' ';
-    // } cout << '\n';
 
 }
 
@@ -78,51 +57,33 @@ void north(int yy, int xx) {  // 북
     vector<int> cv(7);
     // copy(dice.begin(), dice.end(), cv.begin());
 
-    for(int i=0; i<=7; i++) {
+    for(int i=0; i<8; i++) {
         cv[i] = dice[i];
     }
-
-    // cout << "CV\n";
-    // for(int i=1; i<7; i++) {
-    //     cout << cv[i] << ' ';
-    // } cout << '\n';
 
     dice[1] = cv[5]; dice[2] = cv[1]; dice[3] = cv[3];
     dice[4] = cv[4]; dice[5] = cv[6]; dice[6] = cv[2];
 
     // dice = {0, dice[5], dice[1], dice[3], dice[4], dice[6], dice[2]};
 
-    // cout << "NORTH\n";
-    // for(int i=1; i<7; i++) {
-    //     cout << dice[i] << ' ';
-    // } cout << '\n';
 }
 
 void south(int yy, int xx) {  // 남
     if(yy+1 >= N) { flag = false; return; }
     else { y++; }
-    // cout << "PASS 1 \n";
+
     vector<int> cv(7);
     // copy(dice.begin(), dice.end(), cv.begin());
 
-    for(int i=0; i<=7; i++) {
+    for(int i=0; i<8; i++) {
         cv[i] = dice[i];
     }
-
-    // cout << "CV\n";
-    // for(int i=1; i<7; i++) {
-    //     cout << cv[i] << ' ';
-    // } cout << '\n';
 
     dice[1] = cv[2]; dice[2] = cv[6]; dice[3] = cv[3];
     dice[4] = cv[4]; dice[5] = cv[1]; dice[6] = cv[5];
 
     // dice = {0, dice[2], dice[6], dice[3], dice[4], dice[1], dice[5]};
 
-    // cout << "SOUTH\n";
-    // for(int i=1; i<7; i++) {
-    //     cout << dice[i] << ' ';
-    // } cout << '\n';
 }
 
 int main() {
@@ -152,22 +113,20 @@ int main() {
     
     // 이동 명령 수행
     for(int i=0; i<K; i++) {
+        flag = true;
+
         if(v[i] == 1) { east(y, x); }
         else if(v[i] == 2) { west(y, x); }
         else if(v[i] == 3) { north(y, x); }
         else if(v[i] == 4) { south(y, x); }
 
-        if(flag == false) { flag = true; continue; }
-
-        if(map[y][x] == 0) { map[y][x] = dice[6]; }
-        else { 
-            dice[6] = map[y][x]; map[y][x] = 0;
-            // cout << "dice[6] : " << dice[6] << '\n';
-        }
+        if(flag == false) { continue; }
 
         cout << dice[1] << '\n';
-    }
 
+        if(map[y][x] == 0) { map[y][x] = dice[6]; }
+        else { dice[6] = map[y][x]; map[y][x] = 0; }
+    }
 
     return 0;
 }
