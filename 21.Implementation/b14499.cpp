@@ -6,7 +6,7 @@ using namespace std;
 // 주사위 굴리기
 // 주사위 구현만 구글링 ...
 
-#define MAX 20
+#define MAX 21
 
 vector<int> dice(7);        // 1-6, 4-3, 2-5
 int map[MAX][MAX] = {0, };  // 지도
@@ -19,11 +19,12 @@ bool flag = true;       // 명령이 가능한 명령인지 (가능: true, 불�
 // 파라미터는 현재 주사위의 위치 (즉, 명령 수행 전)
 void east(int yy, int xx) {   // 동
     if(xx+1 >= M) { flag = false; return; }    // 범위 미스
-    else { x++; }
+    // else { x++; }
+    x++;
 
-    vector<int> cv(7);
+    int cv[7];
     // copy(dice.begin(), dice.end(), cv.begin());
-    for(int i=0; i<8; i++) {
+    for(int i=1; i<=6; i++) {
         cv[i] = dice[i];
     }
 
@@ -35,11 +36,12 @@ void east(int yy, int xx) {   // 동
 
 void west(int yy, int xx) {   // 서
     if(xx-1 < 0) { flag = false; return; }
-    else { x--; }
+    // else { x--; }
+    x--;
 
-    vector<int> cv(7);
+    int cv[7];
     // copy(dice.begin(), dice.end(), cv.begin());
-    for(int i=0; i<8; i++) {
+    for(int i=1; i<=6; i++) {
         cv[i] = dice[i];
     }
 
@@ -52,12 +54,13 @@ void west(int yy, int xx) {   // 서
 
 void north(int yy, int xx) {  // 북
     if(yy-1 < 0) { flag = false; return; }
-    else { y--; }
+    // else { y--; }
+    y--;
 
-    vector<int> cv(7);
+    int cv[7];
     // copy(dice.begin(), dice.end(), cv.begin());
 
-    for(int i=0; i<8; i++) {
+    for(int i=1; i<=6; i++) {
         cv[i] = dice[i];
     }
 
@@ -70,12 +73,13 @@ void north(int yy, int xx) {  // 북
 
 void south(int yy, int xx) {  // 남
     if(yy+1 >= N) { flag = false; return; }
-    else { y++; }
+    // else { y++; }
+    y++;
 
-    vector<int> cv(7);
+    int cv[7];
     // copy(dice.begin(), dice.end(), cv.begin());
 
-    for(int i=0; i<8; i++) {
+    for(int i=1; i<=6; i++) {
         cv[i] = dice[i];
     }
 
