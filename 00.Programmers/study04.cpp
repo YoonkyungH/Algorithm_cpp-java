@@ -1,87 +1,55 @@
-// 오픈채팅방
+// 오픈 채팅방
 
-#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <unordered_map> // map보다 빠른 탐색, 중복 데이터 허용 x
+#include <sstream>  // stringstream
+#include <map>
 using namespace std;
-
-unordered_map<string, string> user;    // uid, name
-
-vector<pair<int, string> > state;         // 상태, uid
-// 1: enter 2: leave
 
 vector<string> solution(vector<string> record) {
     vector<string> answer;
 
-    for (int i = 0; i < record.size(); i++) {
+    vector<string> uid; // uid만 따로 저장
+    map<string, string> m;  // id, name
+
+    stringstream ss;    // : 주어진 문자열에서 필요한 정보를 빼냄
+
+    string action;
+    string id, nickname;
+
+    for(int i=0; i<record.size(); i++) {
+        ss.str(record[i]);
         
-        if(record[i][0]=='E') { 
-            int j=9;
-            string tmpId = "";
-            string tmpName = "";
+        ss >> action;   // Enter, Leave, Change 중 하나가 담기게 됨
 
-            while(record[i][j]!=' ') {
-                tmpId += record[i][j++];
-            }
-            j++;
-            while(record[i][j]!='\0') {
-                tmpName += record[i][j++];
-            } 
-            
-            // cout << "ENTER: " << tmpId << ' ' << tmpName << '\n';
+        if(action == "Enter") {
+            ss >> id;
+            ss >> nickname;
 
-            user[tmpId] = tmpName;
-            state.push_back(make_pair(1, tmpId));
+            answer.push_back("님이 들어왔습니다.");
+            uid.push_back(id);  // id만 따로 저장
+
+            m[id] = nickname;   // key-value 저장
+        }
+        else if(action == "Leave") {
+            ss >> id;
+
+            answer.push_back("님이 나갔습니다.");
+            uid.push_back(id);
+        }
+        else if(action == "Change") {
+            ss >> id;
+            ss >> nickname;
+
+            m[id] = nickname; // 닉네임 교체
         }
 
-        else if(record[i][0] == 'L') {
-            int j=9;
-            string tmpId = "";
-
-            while(record[i][j]!='\0') {
-                tmpId += record[i][j++];
-            }
-            
-            // cout << "LEAVE: " << tmpId << '\n';
-
-            state.push_back(make_pair(2, tmpId));
-        }
-
-        else if(record[i][0] == 'C') {
-            int j=10;
-            string tmpId = "";
-            string tmpChangeName = "";
-
-            while(record[i][j]!=' ') {
-                tmpId += record[i][j++];
-            } j++;
-            while(record[i][j]!='\0') {
-                tmpChangeName += record[i][j++];
-            }
-            // cout << "CHANGE: " << tmpId << ' ' << tmpChangeName << '\n';
-
-            // state.push_back(make_pair(3, tmpId));
-
-            // 바뀌기 전 닉네임은 몰라도 되니까 그냥 바로 바꿔버리기
-            user[tmpId] = tmpChangeName;    
-        }
-
+        ss.clear(); // 저장된 문자열을 clear 하진 않음. 다만 새로운 문자열을 받았을 때 첫 위치부터 추출 가능하게 함.
     }
 
-    for(int i=0; i<state.size(); i++) {
-        if(state[i].first == 1) {
-            answer.push_back(user[state[i].second] + "님이 들어왔습니다.");
-        } else if(state[i].first == 2) {
-            answer.push_back(user[state[i].second] + "님이 나갔습니다.");
-        }
+    for(int i=0; i<answer.size(); i++) {
+        answer[i] = m[uid[i]] + answer[i];  // 반환해야 할 벡터를 완성시켜 줌(최종적인 닉네임 붙여주기 + 행위)
     }
-
 
     return answer;
 }
-
-
-
-
