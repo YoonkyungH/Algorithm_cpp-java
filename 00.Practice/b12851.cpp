@@ -21,10 +21,12 @@ void bfs(int N) {
 
         visited[x] = true;  // pop시 방문여부 바꿔주기
 
+        // 이미 최소 시간으로 방문했던 이력이 있는 경우
         if(cnt && ans == time && x == K) {
             cnt++;
         }
 
+        // 처음으로 방문한 경우
         if(!cnt && x == K) {
             ans = time;
             cnt++;
@@ -32,15 +34,12 @@ void bfs(int N) {
 
         if (x - 1 >= 0 && visited[x - 1] == false) {
             q.push(make_pair(x - 1, time + 1));
-            // visited[x - 1] = true;
         }
         if (x * 2 < MAX && visited[x * 2] == false) {
             q.push(make_pair(x * 2, time + 1));
-            // visited[x * 2] = true;
         }
         if (x + 1 < MAX && visited[x + 1] == false) {
             q.push(make_pair(x + 1, time + 1));
-            // visited[x + 1] = true;
         }
     }
 
@@ -53,6 +52,7 @@ int main() {
 
     bfs(N);
 
+    // 시간, 방법의 수
     cout << ans << '\n' << cnt << '\n';
     
     return 0;
