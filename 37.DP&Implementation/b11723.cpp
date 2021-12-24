@@ -13,7 +13,7 @@ bool visited[MAX];
 
 int main() {
     ios::sync_with_stdio(0);
-    cin.tie(0);
+    cin.tie(0); // 이거 없으면 시간 초과
 
     int M;
     cin >> M;
