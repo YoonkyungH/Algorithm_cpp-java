@@ -1,6 +1,6 @@
 // 스도쿠
 // 백트래킹
-// segmentation fault 문제 해결 못함
+// segmentation fault 문제 해결 못함 -> exit(0); 추가 후 해결 
 
 #include <iostream>
 #include <vector>
@@ -49,6 +49,7 @@ void DFS(int idx) {
                 cout << map[i][j];
             } cout << '\n';
         }
+        exit(0);
     }
 
     int x = v[idx].first;
@@ -61,7 +62,6 @@ void DFS(int idx) {
             map[x][y] = 0;
         }
     }
-
     return;
 }
 
