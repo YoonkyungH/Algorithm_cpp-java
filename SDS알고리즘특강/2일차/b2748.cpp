@@ -1,5 +1,5 @@
 // 피보나치 수2
-// 시간 복잡도
+// Bottom up 방식
 
 #include <iostream>
 
