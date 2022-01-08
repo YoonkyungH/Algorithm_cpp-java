@@ -45,8 +45,10 @@ int main() {
         char a, b, c;
         cin >> a >> b >> c;
 
-        tree[a-'A'].left = b;
+        tree[a-'A'].left = b;   // a-'A': a가 'A'라면 'A'-'A' = 1 (즉, A는 1, B는 2 ...)
         tree[a-'A'].right = c;
+
+        cout << "TEST: " << a-'A' << '\n';
     }
 
     preOrder('A');
