@@ -19,12 +19,14 @@ using namespace std;
 
 int N, M;
 int input_degree[32001];    // 화살표 개수를 담을 배열
-vector<int> adjust[32001];  // 누가 누굴 가리키고 있는지가 담겨있는 벡터
+vector<int> adjust[32001];  // 누가 누굴 가리키고 있는지가 담겨있는 벡터(몇개가 들어올지 모를 때는 벡터를 사용)
 int result[32001];          // 출력할 배열(답)
 
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
+
+    // memset(input_degree, 0, (sizeof(input_degree))); // 초기화 함수 (웬만하면 0으로 초기화 하기)
 
     queue<int> q;
 
