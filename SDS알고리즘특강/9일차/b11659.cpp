@@ -17,8 +17,6 @@ int main() {
     cin >> N >> M;
     for(int i=1; i<=N; i++) {
         cin >> arr[i];
-        // cin >> num;
-        // arr[i] = arr[i-1] + num;
     }
 
     
