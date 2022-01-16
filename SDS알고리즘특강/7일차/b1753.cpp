@@ -1,5 +1,6 @@
 // 최단경로
 // 다익스트라 알고리즘
+// parent배열로 어디로부터 왔을 때 최단경로였는지를 저장 (즉, 갱신되었을 때 저장해주는)
 
 #include <iostream>
 #include <queue>
