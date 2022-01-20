@@ -16,7 +16,9 @@ struct Data {
     Data(int second, int node) : second(second), node(node) {};
 
     bool operator<(const Data d) const {
-        return second > d.second;
+        return second > d.second;   // 부등호 주의 
+        // '<'는 시간초과
+        // priority_queue는 시간 효율을 위해 사용하는데 "우선순위"를 지키지 못하면 의미가 없음
     }
 };
 
@@ -63,7 +65,7 @@ int main() {
                 }
             }            
         }
-        
+
         cp = 0, tm = 0;
         for(int i=1; i<=n; i++) {
             if(dp[i] != INF) {
