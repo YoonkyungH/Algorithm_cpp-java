@@ -1,6 +1,7 @@
 // 암호 만들기
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 int L, C;
