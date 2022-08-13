@@ -39,7 +39,7 @@ int main() {
     int curY=1, curX=1;
     q.push(make_pair(1, 1));
 
-    int dirIdx = 0;    // 1 동 2 서 3 남 4 북 (현재 바라보는 방향)
+    int dirIdx = 0; 
     int i = 0;  // vector(방향 전환)
     while(1) {
         ans++;
