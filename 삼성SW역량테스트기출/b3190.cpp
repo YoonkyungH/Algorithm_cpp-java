@@ -13,6 +13,9 @@ int ans;
 
 queue<pair<int, int> > q;
 
+int dx[] = {0, 1, 0, -1};
+int dy[] = {1, 0, -1, 0};
+
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
@@ -20,15 +23,10 @@ int main() {
     cin >> N >> K;  // 보드의 크기, 사과의 개수
     for(int i=0; i<K; i++) {
         int y, x;
-        cin >> y >> x;
+        cin >> x >> y;
         map[x][y] = 1;
     }
 
-    // for(int i=1; i<=N; i++) {
-    //     for(int j=1; j<=N; j++) {
-    //         cout << map[j][i] << ' ';
-    //     }cout << '\n';
-    // }
 
     cin >> L;
     for(int i=0; i<L; i++) {
@@ -39,63 +37,53 @@ int main() {
 
 
     int curY=1, curX=1;
-    q.push(make_pair(curX, curY));
+    q.push(make_pair(1, 1));
 
-    int dir = 1;    // 1 동 2 서 3 남 4 북 (현재 바라보는 방향)
+    int dirIdx = 0;    // 1 동 2 서 3 남 4 북 (현재 바라보는 방향)
     int i = 0;  // vector(방향 전환)
     while(1) {
         ans++;
-        if(visited[curX][curY] || curY>N || curX>N) {
-            cout << "curX and curY: " << curX << " " << curY << '\n'; 
+
+        int nx = curX + dx[dirIdx];
+        int ny = curY + dy[dirIdx];
+        if(visited[nx][ny] || ny>N || nx>N || nx<=0 || ny<=0) {
+
             break;
         }   // 벽이나 자신의 몸에 부딪혔을 때 break
 
+        curX = nx;
+        curY = ny;
         visited[curX][curY] = true;
+        q.push(make_pair(nx, ny));
+
+        // 사과가 없다면 pop으로 꼬리 빼주기
+        // 사과가 있다면 앞으로 이동(꼬리 유지 -> queue에서 빼지 않기)
+        if(map[nx][ny] == 0) {
+
+            int tmpX = q.front().first;
+            int tmpY = q.front().second;
+            visited[tmpX][tmpY] = false;
+
+
+            q.pop(); // 꼬리 빼주기
+        } else {
+            map[nx][ny] = 0;    // 먹은 사과 없애기
+        }
 
 
         if(ans == v[i].first) {
-            if(dir == 1) {
-                if(v[i].second == 'L') dir = 4;
-                else dir = 3;
-            } else if(dir == 2) {
-                if(v[i].second == 'L') dir = 3;
-                else dir = 4;
-            } else if(dir == 3) {
-                if(v[i].second == 'L') dir = 1;
-                else dir = 2;
-            } else if(dir == 4) {
-                if(v[i].second == 'L') dir = 2;
-                else dir = 1;
+            if(v[i].second == 'D') {
+                dirIdx++;
+                if(dirIdx > 3) { dirIdx = 0; }
+            } else {
+                dirIdx--;
+                if(dirIdx < 0) { dirIdx = 3; }
             }
+
             i++;
         }   // 몸의 방향을 돌려야 할 시간이 되었을 때 머리 방향 바꾸기
 
 
-        if(dir == 1) {  // 동쪽 바라보는 상황
-            curX++;
-        } else if(dir == 2) {
-            curX--;
-        } else if(dir == 3) {
-            curY++;
-        } else if(dir == 4) {
-            curY--;
-        }
-
-
-        q.push(make_pair(curX, curY));
-
-        // 사과가 없다면 pop으로 꼬리 빼주기
-        // 사과가 있다면 앞으로 이동(꼬리 유지 -> queue에서 빼지 않기)
-        if(map[curX][curY] == 0) {
-
-            int tmpX = q.front().second;
-            int tmpY = q.front().first;
-            visited[tmpX][tmpY] = false;
-
-            cout << "사과 없음 " << tmpX << " " << tmpY << '\n';
-
-            q.pop(); // 꼬리 빼주기
-        } 
     }
     
     cout << ans << '\n';
