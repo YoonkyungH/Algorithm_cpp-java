@@ -5,84 +5,83 @@
 #include <cstring>  // memset
 using namespace std;
 
-// int arr[101][101] = {0, };
-int check[101] = {0, }; // 숫자 빈도 횟수
-vector<vector<int> > v;
+int arr[101][101];
+int num[101];
 int r, c, k;
-int rowLen, colLen;
+int rowMax, colMax;   // 행 열
 int sec;
 
 bool cmp(pair<int, int> a, pair<int, int> b) {
-    if(a.second != b.second) {
-        return a.second < b.second;
-    } else {
+    if(a.first != b.first) {
         return a.first < b.first;
+    } else {
+        return a.second < b.second;
     }
 }
 
-void Row() {    // 행 연산
-    for(int i=0; i<rowLen; i++) {
-        memset(check, 0, sizeof(check));
+void calRow() {
 
-        for(int j=0; j<colLen; j++) {
-            if(v[i][j] != 0) {
-                check[v[i][j]]++;
+    for(int i=1; i<=rowMax; i++) {
+        vector<pair<int, int> > v;  // (횟수, 숫자)
+        // memset(num, 0, sizeof(num));
+        int num[101] = {0, };
+
+        for(int j=1; j<=colMax; j++) {
+            if(arr[i][j] != 0) {
+                num[arr[i][j]]++;
             }
         }
 
-        vector<pair<int, int> > tmp;
-        for(int j=1; j<101; j++) {
-            if(!check[j]) continue;
+        for(int j=1; j<=100; j++) {
+            if(num[j] == 0) continue;
 
-            tmp.push_back(make_pair(j, check[j]));
+            v.push_back(make_pair(num[j], j));
         }
+        sort(v.begin(), v.end(), cmp);   // 정렬
+        colMax = max(colMax, int(v.size()*2));
 
-        sort(tmp.begin(), tmp.end(), cmp);   // 오름차순 정렬
 
-        colLen = max(colLen, int(tmp.size()) * 2);  // 최대 행 수
+        for(int j=1; j<=colMax; j++) {
+            arr[i][j] = 0;
+        }   // 초기화
 
-        for(int j=0; j<v[i].size(); j++) {
-            v[i][j] = 0;
+        int k=1;
+        for(int j=0; j<v.size(); j++) {
+            arr[i][k++] = v[j].second;
+            arr[i][k++] = v[j].first;
         }
-        // memset(v[i], 0, sizeof(v[i]));
-        for(int j=0; j<tmp.size(); j++) {
-            v[i][j*2+1] = tmp[j].first;
-            v[i][(j+1) * 2] = tmp[j].second;
-        }
-
     }
+
 }
 
-void Col() {    // 열 연산
-    for(int i=0; i<colLen; i++) {
-        memset(check, 0, sizeof(check));
-
-        for(int j=0; j<rowLen; j++) {
-            if(v[j][i] != 0) {
-                check[v[j][i]]++;
+void calCol() {
+    for(int i=1; i<=colMax; i++) {
+        vector<pair<int, int> > v;
+        // memset(num, 0, sizeof(num));
+        int num[101] = {0, };
+        for(int j=1; j<=rowMax; j++) {
+            if(arr[j][i] != 0) {
+                num[arr[j][i]]++;
             }
         }
 
-        vector<pair<int, int> > tmp;
-        for(int j=1; j<101; j++) {
-            if(!check[j]) continue;
+        for(int j=1; j<=100; j++) {
+            if(num[j] == 0) continue;
 
-            tmp.push_back(make_pair(j, check[j]));
+            v.push_back(make_pair(num[j], j));
         }
+        sort(v.begin(), v.end(), cmp);
+        rowMax = max(rowMax, int(v.size()*2));
+        
+        for(int j=1; j<=colMax; j++) {
+            arr[j][i] = 0; 
+        }   // 초기화
 
-        sort(tmp.begin(), tmp.end(), cmp);
-
-        rowLen = max(rowLen, int(tmp.size()) * 2);
-
-        for(int j=0; j<100; j++) {
-            v[j][i] = 0;
+        int k=1; 
+        for(int j=0; j<v.size(); j++) {
+            arr[k++][i] = v[j].second;
+            arr[k++][i] = v[j].first;
         }
-
-        for(int j=0; j<tmp.size(); j++) {
-            v[j*2 + 1][i] = tmp[j].first;
-            v[(j+1) * 2][i] = tmp[j].second;
-        }
-
     }
 }
 
@@ -91,40 +90,28 @@ int main() {
     cin.tie(0);
 
     cin >> r >> c >> k;
-    rowLen = 3; colLen = 3;   // 행, 열 길이
-
-    v.resize(3, vector<int>(3, 0));
-    for(int i=0; i<3; i++) {
-        for(int j=0; j<3; j++) {
-            // cin >> arr[i][j];
-            cin >> v[i][j];
-            
+    for(int i=1; i<=3; i++) {
+        for(int j=1; j<=3; j++) {
+            cin >> arr[i][j];
         }
     }
 
+    rowMax = 3; colMax = 3;
     while(1) {
-        if(v[r-1][c-1] == k) {
+        if(arr[r][c] == k) {
             cout << sec << '\n';
             break;
         }
         if(sec > 100) {
-            cout << "-1\n";
+            cout << "-1\n";   
             break;
         }
 
-        rowLen = v.size();
-        colLen = v[0].size();
-
-
-        if(rowLen >= colLen) {  // 행의 길이 >= 열의 길이 -> 행 정렬 연산
-            Row();
-        } else {    // 열의 길이 > 행의 길이 -> 열 정렬 연산
-            Col();
-        }
-
+        if(rowMax >= colMax) { calRow(); }
+        else { calCol(); }
+        
         sec++;
     }
-    
 
     return 0;
 }
