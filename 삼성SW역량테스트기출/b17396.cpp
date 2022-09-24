@@ -1,32 +1,17 @@
 // 백도어
+// 다익스트라로 안 풀면 시간초과
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <queue>
 using namespace std;
 
-#define INF 987654321
+#define INF 10000000001
 
 int N, M;
+vector<long long> dist;
 int sight[100001];  // 시야
-bool visited[100001] = {false, };
-vector<pair<int, int> > v[300001];
-int ans = INF;
-
-void sol(int start, int t) {
-    if(start == N-1) {
-        ans = min(ans, t);
-    }
-
-    for(int i=0; i<v[start].size(); i++) {
-        if(!visited[v[start][i].first]) {
-            if (v[start][i].first == N-1 || sight[v[start][i].first] == 0) {
-                visited[v[start][i].first] = true;
-                sol(v[start][i].first, v[start][i].second + t);
-                visited[v[start][i].first] = false;
-            }
-        }
-    }
-}
+vector<vector<pair<int, int> > > v;
+vector<bool> visited;
 
 int main() {
     ios::sync_with_stdio(0);
@@ -37,20 +22,42 @@ int main() {
         cin >> sight[i];
     }
 
+    v = vector<vector<pair<int, int> > >(N);
     for(int i=0; i<M; i++) {
         int a, b, t;
         cin >> a >> b >> t;
 
-        v[a].push_back(make_pair(b, t));
-        v[b].push_back(make_pair(a, t));
+        v[a].push_back(make_pair(t, b));
+        v[b].push_back(make_pair(t, a));
     }
 
+    dist.resize(N);
+    dist.assign(N, INF);
+    visited.resize(N);
+    visited.assign(N, false);
 
-    visited[0] = true;
-    sol(0, 0);
+    priority_queue<pair<long long, int> > pq;
 
-    if(ans == INF) cout << "-1\n";
-    else cout << ans << '\n';
+    dist[0] = 0;
+    pq.push(make_pair(0, 0));
+
+    while(!pq.empty()) {
+        auto cur = pq.top();
+        pq.pop();
+
+        if(visited[cur.second]) continue;
+
+        visited[cur.second] = true;
+        for(auto x : v[cur.second]) {
+            if(!(sight[x.second] && x.second != N-1) && (dist[x.second] > dist[cur.second] + x.first)) {
+                dist[x.second] = x.first + dist[cur.second];
+                pq.push(make_pair(-dist[x.second], x.second));
+            }
+        }
+    }
+
+    if(dist[N-1] == INF) cout << "-1\n";
+    else cout << dist[N-1] << '\n';
 
     return 0;
 }
